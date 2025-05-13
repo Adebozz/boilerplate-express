@@ -3,10 +3,10 @@ let app = express();
 let path = require('path');
 require('dotenv').config(); // Load environment variables
 
-// 🔍 Root-level logger middleware
+// Root-level logger middleware
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
-  next(); // Move to the next middleware or route handler
+  next();
 });
 
 // Serve static assets from the /public directory
@@ -27,7 +27,24 @@ app.get('/json', (req, res) => {
   res.json({ message: message });
 });
 
-// Debugging log
+// Route to serve current time using chained middleware
+app.get('/now', 
+  function(req, res, next) {
+    req.time = new Date().toString();
+    next();
+  }, 
+  function(req, res) {
+    res.json({ time: req.time });
+  }
+);
+
+// ✅ Echo route using route parameter
+app.get('/:word/echo', (req, res) => {
+  const word = req.params.word;
+  res.json({ echo: word });
+});
+
+// Console log for debugging
 console.log("Hello World");
 
 module.exports = app;
