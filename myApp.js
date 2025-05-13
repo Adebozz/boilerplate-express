@@ -38,10 +38,17 @@ app.get('/now',
   }
 );
 
-// ✅ Echo route using route parameter
+// Echo route using route parameter
 app.get('/:word/echo', (req, res) => {
   const word = req.params.word;
   res.json({ echo: word });
+});
+
+// ✅ GET /name route that returns full name from query string
+app.route('/name').get((req, res) => {
+  const firstName = req.query.first;
+  const lastName = req.query.last;
+  res.json({ name: `${firstName} ${lastName}` });
 });
 
 // Console log for debugging
